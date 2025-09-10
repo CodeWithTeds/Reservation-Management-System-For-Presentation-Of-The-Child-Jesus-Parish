@@ -16,7 +16,7 @@ defineProps<Props>()
     <img
         src="/images/logo.png"
         alt="Logo"
-        class="h-18 w-25 rounded-full"
+        class="h-12 w-12 rounded-full"
         v-bind="$attrs"
     />
 </template>
