@@ -30,7 +30,7 @@ const props = defineProps<{
 }>();
 
 const formatDateTime = (dateTime: string): string => {
-  return format(new Date(dateTime), 'MMM d, yyyy h:mm a');
+  return format(new Date(dateTime), 'MMM d, yyyy h:mm a').replace('yyyy', new Date(dateTime).getFullYear().toString());
 };
 
 const getStatusClass = (status: string): string => {

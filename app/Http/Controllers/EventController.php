@@ -73,6 +73,32 @@ class EventController extends Controller
             'activities' => 'nullable|string',
             'room_id' => 'nullable|exists:rooms,id',
         ]);
+        
+        // Check for double booking if a room is selected
+        if ($request->room_id) {
+            $roomId = $request->room_id;
+            $startTime = $request->start_time;
+            $endTime = $request->end_time;
+            
+            // Check if there are any overlapping events for this room
+            $overlappingEvents = Event::where('room_id', $roomId)
+                ->where('status', '!=', 'cancelled')
+                ->where(function ($query) use ($startTime, $endTime) {
+                    $query->whereBetween('start_time', [$startTime, $endTime])
+                        ->orWhereBetween('end_time', [$startTime, $endTime])
+                        ->orWhere(function ($q) use ($startTime, $endTime) {
+                            $q->where('start_time', '<=', $startTime)
+                              ->where('end_time', '>=', $endTime);
+                        });
+                })
+                ->exists();
+                
+            if ($overlappingEvents) {
+                return back()->withErrors([
+                    'room_id' => 'This room is already booked during the selected time period.'
+                ])->withInput();
+            }
+        }
 
         $event = Event::create([
             ...$validated,
@@ -155,6 +181,38 @@ class EventController extends Controller
             'activities' => 'nullable|string',
             'room_id' => 'nullable|exists:rooms,id',
         ]);
+        
+        // Check for double booking if a room is selected and it's different from the current room
+        // or if the event times have changed
+        if ($request->room_id && 
+            ($request->room_id != $event->room_id || 
+             $request->start_time != $event->start_time || 
+             $request->end_time != $event->end_time)) {
+            
+            $roomId = $request->room_id;
+            $startTime = $request->start_time;
+            $endTime = $request->end_time;
+            
+            // Check if there are any overlapping events for this room, excluding the current event
+            $overlappingEvents = Event::where('room_id', $roomId)
+                ->where('id', '!=', $event->id)
+                ->where('status', '!=', 'cancelled')
+                ->where(function ($query) use ($startTime, $endTime) {
+                    $query->whereBetween('start_time', [$startTime, $endTime])
+                        ->orWhereBetween('end_time', [$startTime, $endTime])
+                        ->orWhere(function ($q) use ($startTime, $endTime) {
+                            $q->where('start_time', '<=', $startTime)
+                              ->where('end_time', '>=', $endTime);
+                        });
+                })
+                ->exists();
+                
+            if ($overlappingEvents) {
+                return back()->withErrors([
+                    'room_id' => 'This room is already booked during the selected time period.'
+                ])->withInput();
+            }
+        }
 
         // Store the old room ID and status before updating
         $oldRoomId = $event->room_id;
