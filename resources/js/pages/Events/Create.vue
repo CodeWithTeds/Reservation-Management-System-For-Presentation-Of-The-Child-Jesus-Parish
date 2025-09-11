@@ -5,8 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Textarea from '@/components/ui/textarea/textarea.vue';
+// Select components removed as we're using standard HTML select elements
 
 import InputError from '@/components/InputError.vue';
+
+interface Room {
+  id: number;
+  name: string;
+  capacity: number | null;
+  status: string;
+}
 
 interface EventForm {
   title: string;
@@ -18,7 +26,12 @@ interface EventForm {
   status: string;
   priest_name: string;
   activities: string;
+  room_id: number | null;
 }
+
+defineProps<{
+  rooms: Room[];
+}>();
 
 const form = useForm<EventForm>({
   title: '',
@@ -30,6 +43,7 @@ const form = useForm<EventForm>({
   status: 'scheduled',
   priest_name: '',
   activities: '',
+  room_id: null,
 });
 
 const submit = (): void => {
@@ -163,6 +177,36 @@ const submit = (): void => {
                   :rows="3"
                 />
                 <InputError :message="form.errors.activities" class="mt-2" />
+              </div>
+
+              <div class="mt-6">
+                <Label for="room_id">Room (Optional)</Label>
+                <select
+                  id="room_id"
+                  v-model="form.room_id"
+                  class="mt-1 block w-full rounded-md border border-gray-300 bg-white p-2 text-sm"
+                >
+                  <option :value="null">No Room</option>
+                  <option 
+                    v-for="room in rooms" 
+                    :key="room.id" 
+                    :value="room.id.toString()"
+                    :disabled="room.status === 'occupied' || room.status === 'maintenance'"
+                    :class="{
+                      'text-red-500': room.status === 'occupied',
+                      'text-yellow-500': room.status === 'maintenance',
+                      'text-green-500': room.status === 'available'
+                    }"
+                  >
+                    {{ room.name }} ({{ room.status }})
+                  </option>
+                </select>
+                <div class="mt-2 text-xs text-gray-500">
+                  <span class="text-green-500 mr-2">●</span> Available
+                  <span class="text-red-500 mx-2">●</span> Occupied (cannot be selected)
+                  <span class="text-yellow-500 mx-2">●</span> Maintenance (cannot be selected)
+                </div>
+                <InputError :message="form.errors.room_id" class="mt-2" />
               </div>
 
               <div class="mt-4 flex justify-end space-x-4">

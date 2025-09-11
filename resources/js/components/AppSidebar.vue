@@ -36,6 +36,12 @@ const mainNavItems: NavItem[] = [
             },
         ],
     },
+    // Room Management - simplified
+    {
+        title: 'Room Management',
+        href: '/rooms',
+        icon: BookOpen,
+    },
     {
         title: 'Reservation System',
         href: '/reservations',

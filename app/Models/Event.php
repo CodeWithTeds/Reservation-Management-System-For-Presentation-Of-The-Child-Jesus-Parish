@@ -23,6 +23,7 @@ class Event extends Model
         'created_by',
         'priest_name',
         'activities',
+        'room_id',
     ];
 
     /**
@@ -41,5 +42,13 @@ class Event extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get the room associated with the event.
+     */
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class);
     }
 }

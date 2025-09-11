@@ -2,16 +2,16 @@
 import { provide, ref } from 'vue';
 
 const props = defineProps<{
-  modelValue?: string;
+  modelValue?: string | number | null;
 }>();
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string];
+  'update:modelValue': [value: string | number | null];
 }>();
 
 // Always initialize as closed
 const open = ref(false);
-const selectedValue = ref(props.modelValue || '');
+const selectedValue = ref(props.modelValue !== undefined ? props.modelValue : '');
 
 // Track trigger element and its viewport rect for Teleport positioning
 const triggerEl = ref<HTMLElement | null>(null);
@@ -43,7 +43,7 @@ provide('select', {
   triggerRect,
   setTriggerEl,
   updatePosition,
-  updateValue: (value: string) => {
+  updateValue: (value: string | number | null) => {
     selectedValue.value = value;
     emit('update:modelValue', value);
     // Ensure dropdown closes after selection
@@ -56,4 +56,4 @@ provide('select', {
   <div class="relative">
     <slot></slot>
   </div>
-</template> 
+</template>

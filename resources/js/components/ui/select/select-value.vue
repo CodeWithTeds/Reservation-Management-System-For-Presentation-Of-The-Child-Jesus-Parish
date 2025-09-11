@@ -6,7 +6,7 @@ const props = defineProps<{
 }>();
 
 const select = inject('select') as {
-  selectedValue: Ref<string>;
+  selectedValue: Ref<string | number | null>;
 };
 
 const displayValue = computed(() => {

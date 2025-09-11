@@ -2,12 +2,12 @@
 import { inject, Ref, computed } from 'vue';
 
 const props = defineProps<{
-  value: string;
+  value: string | number | null;
 }>();
 
 const select = inject('select') as {
-  selectedValue: Ref<string>;
-  updateValue: (value: string) => void;
+  selectedValue: Ref<string | number | null>;
+  updateValue: (value: string | number | null) => void;
 };
 
 const isSelected = computed(() => {
