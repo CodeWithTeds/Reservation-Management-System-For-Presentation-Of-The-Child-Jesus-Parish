@@ -21,6 +21,8 @@ class Event extends Model
         'event_type',
         'status',
         'created_by',
+        'priest_name',
+        'activities',
     ];
 
     /**

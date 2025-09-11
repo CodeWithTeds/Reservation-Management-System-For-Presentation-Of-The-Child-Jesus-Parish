@@ -13,6 +13,8 @@ interface Event {
   end_time: string;
   event_type: string;
   status: string;
+  priest_name: string | null;
+  activities: string | null;
   created_by: number;
   created_at: string;
   updated_at: string;
@@ -92,6 +94,11 @@ const confirmDelete = (): boolean => confirm('Are you sure you want to delete th
                   </div>
 
                   <div class="mb-4">
+                    <p class="text-sm text-gray-600 mb-1">Priest Name</p>
+                    <p class="text-gray-900">{{ event.priest_name || 'Not specified' }}</p>
+                  </div>
+
+                  <div class="mb-4">
                     <p class="text-sm text-gray-600 mb-1">Created By</p>
                     <p class="text-gray-900">{{ event.creator.name }}</p>
                   </div>
@@ -123,6 +130,11 @@ const confirmDelete = (): boolean => confirm('Are you sure you want to delete th
               <div class="mt-6">
                 <p class="text-sm text-gray-600 mb-1">Description</p>
                 <p class="text-gray-900 whitespace-pre-line">{{ event.description || 'No description provided.' }}</p>
+              </div>
+
+              <div class="mt-6">
+                <p class="text-sm text-gray-600 mb-1">Activities</p>
+                <p class="text-gray-900 whitespace-pre-line">{{ event.activities || 'No activities specified.' }}</p>
               </div>
 
               <div class="mt-8 pt-6 border-t border-gray-200">

@@ -42,6 +42,8 @@ class EventController extends Controller
             'end_time' => 'required|date|after:start_time',
             'event_type' => 'required|string|max:255',
             'status' => 'required|string|in:scheduled,cancelled,completed',
+            'priest_name' => 'nullable|string|max:255',
+            'activities' => 'nullable|string',
         ]);
 
         $event = Event::create([
@@ -86,6 +88,8 @@ class EventController extends Controller
             'end_time' => 'required|date|after:start_time',
             'event_type' => 'required|string|max:255',
             'status' => 'required|string|in:scheduled,cancelled,completed',
+            'priest_name' => 'nullable|string|max:255',
+            'activities' => 'nullable|string',
         ]);
 
         $event->update($validated);

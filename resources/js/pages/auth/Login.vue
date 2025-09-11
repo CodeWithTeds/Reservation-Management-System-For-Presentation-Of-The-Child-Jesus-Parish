@@ -3,12 +3,14 @@ import AuthenticatedSessionController from '@/actions/App/Http/Controllers/Auth/
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import AuthSplitLayout from '@/layouts/auth/AuthSplitLayout.vue';
+import { Label } from '@/components/ui/label';
+import AuthBase from '@/layouts/AuthLayout.vue';
 import { register } from '@/routes';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/vue3';
-import { LoaderCircle, Mail, Lock } from 'lucide-vue-next';
+import { LoaderCircle } from 'lucide-vue-next';
 
 defineProps<{
     status?: string;
@@ -17,7 +19,7 @@ defineProps<{
 </script>
 
 <template>
-    <AuthSplitLayout title="Log in your Account">
+    <AuthBase title="Log in to your account" description="Enter your email and password below to log in">
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
@@ -28,11 +30,11 @@ defineProps<{
             v-bind="AuthenticatedSessionController.store.form()"
             :reset-on-success="['password']"
             v-slot="{ errors, processing }"
-            class="grid gap-y-6"
+            class="flex flex-col gap-6"
         >
-            <div class="grid gap-y-4">
-                <div class="relative">
-                    <Mail class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <div class="grid gap-6">
+                <div class="grid gap-2">
+                    <Label for="email">Email address</Label>
                     <Input
                         id="email"
                         type="email"
@@ -41,42 +43,45 @@ defineProps<{
                         autofocus
                         :tabindex="1"
                         autocomplete="email"
-                        placeholder="Enter Email Id"
-                        class="pl-10 rounded-full"
+                        placeholder="email@example.com"
                     />
                     <InputError :message="errors.email" />
                 </div>
 
                 <div class="grid gap-2">
-                    <div class="relative">
-                        <Lock class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                        <Input
-                            id="password"
-                            type="password"
-                            name="password"
-                            required
-                            :tabindex="2"
-                            autocomplete="current-password"
-                            placeholder="Enter Password"
-                            class="pl-10 rounded-full"
-                        />
-                        <InputError :message="errors.password" />
+                    <div class="flex items-center justify-between">
+                        <Label for="password">Password</Label>
+                        <TextLink v-if="canResetPassword" :href="request()" class="text-sm" :tabindex="5"> Forgot password? </TextLink>
                     </div>
-                    <div class="flex items-center justify-end">
-                        <TextLink v-if="canResetPassword" :href="request()" class="text-sm" :tabindex="5"> Forgot Password? </TextLink>
-                    </div>
+                    <Input
+                        id="password"
+                        type="password"
+                        name="password"
+                        required
+                        :tabindex="2"
+                        autocomplete="current-password"
+                        placeholder="Password"
+                    />
+                    <InputError :message="errors.password" />
                 </div>
 
-                <Button type="submit" class="w-full rounded-full bg-[#FFD633] hover:bg-[#FFD633]/90 text-black" :tabindex="4" :disabled="processing">
+                <div class="flex items-center justify-between">
+                    <Label for="remember" class="flex items-center space-x-3">
+                        <Checkbox id="remember" name="remember" :tabindex="3" />
+                        <span>Remember me</span>
+                    </Label>
+                </div>
+
+                <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing">
                     <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-                    Login
+                    Log in
                 </Button>
             </div>
 
             <div class="text-center text-sm text-muted-foreground">
                 Don't have an account?
-                <TextLink :href="register()" :tabindex="5" class="font-semibold">SIGN UP</TextLink>
+                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
             </div>
         </Form>
-    </AuthSplitLayout>
+    </AuthBase>
 </template>

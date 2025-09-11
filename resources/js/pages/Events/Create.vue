@@ -16,6 +16,8 @@ interface EventForm {
   end_time: string;
   event_type: string;
   status: string;
+  priest_name: string;
+  activities: string;
 }
 
 const form = useForm<EventForm>({
@@ -26,6 +28,8 @@ const form = useForm<EventForm>({
   end_time: '',
   event_type: '',
   status: 'scheduled',
+  priest_name: '',
+  activities: '',
 });
 
 const submit = (): void => {
@@ -139,6 +143,27 @@ const submit = (): void => {
                 <InputError :message="form.errors.status" class="mt-2" />
               </div>
               
+              <div>
+                <Label for="priest_name">Priest Name</Label>
+                <Input
+                  id="priest_name"
+                  v-model="form.priest_name"
+                  type="text"
+                  class="mt-1 block w-full"
+                />
+                <InputError :message="form.errors.priest_name" class="mt-2" />
+              </div>
+
+              <div>
+                <Label for="activities">Activities</Label>
+                <Textarea
+                  id="activities"
+                  v-model="form.activities"
+                  class="mt-1 block w-full"
+                  :rows="3"
+                />
+                <InputError :message="form.errors.activities" class="mt-2" />
+              </div>
 
               <div class="mt-4 flex justify-end space-x-4">
                 <a href="/events" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">

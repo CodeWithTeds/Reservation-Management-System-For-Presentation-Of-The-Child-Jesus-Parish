@@ -17,6 +17,8 @@ interface Event {
   end_time: string;
   event_type: string;
   status: string;
+  priest_name: string | null;
+  activities: string | null;
   created_by: number;
   created_at: string;
   updated_at: string;
@@ -88,6 +90,10 @@ const formatDateTime = (dateTime: string): string => {
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Priest Name
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Start Time
                                         </th>
                                         <th scope="col"
@@ -117,6 +123,9 @@ const formatDateTime = (dateTime: string): string => {
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ event.location }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">{{ event.priest_name || 'Not specified' }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ formatDateTime(event.start_time) }}
@@ -157,7 +166,7 @@ const formatDateTime = (dateTime: string): string => {
                                         </td>
                                     </tr>
                                     <tr v-if="events.length === 0">
-                                        <td colspan="8" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                                        <td colspan="9" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
                                             No events found.
                                             <Link :href="route('events.create')" class="text-indigo-600">Create one
                                             </Link>.

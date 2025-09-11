@@ -17,6 +17,8 @@ interface Event {
   end_time: string;
   event_type: string;
   status: string;
+  priest_name: string | null;
+  activities: string | null;
 }
 
 interface EventForm {
@@ -27,6 +29,8 @@ interface EventForm {
   end_time: string;
   event_type: string;
   status: string;
+  priest_name: string | null;
+  activities: string | null;
   _method: string;
 }
 
@@ -42,6 +46,8 @@ const form = useForm<EventForm>({
   end_time: props.event.end_time ? new Date(props.event.end_time).toISOString().slice(0, 16) : '',
   event_type: props.event.event_type,
   status: props.event.status,
+  priest_name: props.event.priest_name || '',
+  activities: props.event.activities || '',
   _method: 'PUT'
 });
 
@@ -154,6 +160,28 @@ const submit = (): void => {
                   <option value="completed">Completed</option>
                 </select>
                 <InputError :message="form.errors.status" class="mt-2" />
+              </div>
+
+              <div>
+                <Label for="priest_name">Priest Name</Label>
+                <Input
+                  id="priest_name"
+                  :v-model="form.priest_name"
+                  type="text"
+                  class="mt-1 block w-full"
+                />
+                <InputError :message="form.errors.priest_name" class="mt-2" />
+              </div>
+
+              <div>
+                <Label for="activities">Activities</Label>
+                <Textarea
+                  id="activities"
+                  v-model="form.activities"
+                  class="mt-1 block w-full"
+                  :rows="3"
+                />
+                <InputError :message="form.errors.activities" class="mt-2" />
               </div>
 
               <div class="flex items-center justify-end mt-4 space-x-4">
