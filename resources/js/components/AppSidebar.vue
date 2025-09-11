@@ -6,14 +6,35 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { Bell, BookOpen, Calendar, CalendarCheck, Folder, LayoutGrid, Users } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import { route } from 'ziggy-js';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Event Management',
+        href: '/events',
+        icon: Calendar,
+    },
+    {
+        title: 'Reservation System',
+        href: '/reservations',
+        icon: CalendarCheck,
+    },
+    {
+        title: 'Notification System',
+        href: '/notifications',
+        icon: Bell,
+    },
+    {
+        title: 'User Management',
+        href: '/users',
+        icon: Users,
     },
 ];
 
@@ -38,7 +59,7 @@ const footerNavItems: NavItem[] = [
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
                         <Link :href="dashboard()">
-                            <AppLogo />
+                        <AppLogo />
                         </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
