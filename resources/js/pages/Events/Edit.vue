@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,7 +65,7 @@ const form = useForm<EventForm>({
 });
 
 const submit = (): void => {
-  form.post(`/events/${props.event.id}`);
+  form.post(route('admin.events.update', props.event.id));
 };
 </script>
 
@@ -75,10 +76,11 @@ const submit = (): void => {
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-          <div class="p-6 bg-white border-b border-gray-200">
-            <div class="mb-6">
-              <h1 class="text-2xl font-semibold text-gray-900">Edit Event</h1>
+        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+          <div class="p-8 bg-white">
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-gray-900">Edit Event</h1>
+              <div class="h-1 w-20 bg-indigo-500 mt-2 rounded"></div>
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
@@ -119,7 +121,7 @@ const submit = (): void => {
               <div>
                 <Label for="event_type">Event Type</Label>
                 <select id="event_type" v-model="form.event_type"
-                  class="mt-1 block w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                  class="mt-1 block w-full rounded-md border-gray-200 bg-white py-2 pl-3 pr-10 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                   <option disabled value="">-- Select an event --</option>
                   <option value="Mass">Mass</option>
                   <option value="Wedding">Wedding</option>
@@ -133,7 +135,7 @@ const submit = (): void => {
               <div>
                 <Label for="status">Status</Label>
                 <select id="status" v-model="form.status"
-                  class="mt-1 block w-full rounded-md border border-gray-300 bg-white p-2 text-sm">
+                  class="mt-1 block w-full rounded-md border-gray-200 bg-white py-2 pl-3 pr-10 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                   <option value="scheduled">Scheduled</option>
                   <option value="cancelled">Cancelled</option>
                   <option value="completed">Completed</option>
@@ -158,7 +160,7 @@ const submit = (): void => {
                 <select
                   id="room_id"
                   v-model="form.room_id"
-                  class="mt-1 block w-full rounded-md border border-gray-300 bg-white p-2 text-sm"
+                  class="mt-1 block w-full rounded-md border-gray-200 bg-white py-2 pl-3 pr-10 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 >
                   <option :value="null">No Room</option>
                   <option 
@@ -184,11 +186,11 @@ const submit = (): void => {
               </div>
 
               <div class="flex items-center justify-end mt-4 space-x-4">
-                <Link :href="`/events/${props.event.id}`"
-                  class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                <Link :href="route('admin.events.show', props.event.id)"
+                  class="inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-300 rounded-md font-medium text-sm text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
                 Cancel
                 </Link>
-                <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing" type="submit">
+                <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing" type="submit" class="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">
                   Update Event
                 </Button>
               </div>

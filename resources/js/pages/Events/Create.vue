@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Textarea from '@/components/ui/textarea/textarea.vue';
-// Select components removed as we're using standard HTML select elements
+import { route } from 'ziggy-js';
 
 import InputError from '@/components/InputError.vue';
 
@@ -47,7 +47,7 @@ const form = useForm<EventForm>({
 });
 
 const submit = (): void => {
-  form.post('/events');
+  form.post(route('admin.events.store'));
 };
 </script>
 
@@ -210,9 +210,9 @@ const submit = (): void => {
               </div>
 
               <div class="mt-4 flex justify-end space-x-4">
-                <a href="/events" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                <Link :href="route('admin.events.index')" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
                   Cancel
-                </a>
+                </Link>
                 <Button
                   type="submit"
                   :class="{ 'opacity-25': form.processing }"

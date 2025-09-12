@@ -63,10 +63,10 @@ const formatDateTime = (dateTime: string): string => {
                         <div class="flex justify-between items-center mb-6">
                             <h1 class="text-2xl font-semibold text-gray-900">Events</h1>
                             <div class="flex space-x-4">
-                                <Link :href="route('events.calendar')">
+                                <Link :href="route('admin.events.calendar')">
                                 <Button variant="outline">Calendar View</Button>
                                 </Link>
-                                <Link :href="route('events.create')">
+                                <Link :href="route('admin.events.create')">
                                 <Button>Add New Event</Button>
                                 </Link>
                             </div>
@@ -146,17 +146,17 @@ const formatDateTime = (dateTime: string): string => {
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex space-x-2 justify-end">
-                                                <Link :href="`/events/${event.id}`"
+                                                <Link :href="route('admin.events.show', event.id)"
                                                     class="text-indigo-600 hover:text-indigo-900">
                                                 View
                                                 </Link>
-                                                <Link :href="`/events/${event.id}/edit`"
+                                                <Link :href="route('admin.events.edit', event.id)"
                                                     class="text-blue-600 hover:text-blue-900">
                                                 Edit
                                                 </Link>
                                                 <button type="button" class="text-red-600 hover:text-red-900"
                                                     @click="
-                                                         router.delete(`/events/${event.id}`, {
+                                                         router.delete(route('admin.events.destroy', event.id), {
                                                               onBefore: confirmDelete,
                                                           })
                                                           ">
@@ -168,7 +168,7 @@ const formatDateTime = (dateTime: string): string => {
                                     <tr v-if="events.length === 0">
                                         <td colspan="9" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
                                             No events found.
-                                            <Link :href="route('events.create')" class="text-indigo-600">Create one
+                                            <Link :href="route('admin.events.create')" class="text-indigo-600">Create one
                                             </Link>.
                                         </td>
                                     </tr>

@@ -27,7 +27,7 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.put(route('rooms.update', props.room.id));
+  form.put(route('admin.rooms.update', props.room.id));
 };
 </script>
 

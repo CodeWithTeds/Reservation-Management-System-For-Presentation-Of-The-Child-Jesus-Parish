@@ -13,14 +13,17 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Event Management Routes
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::get('admin/dashboard', function () {
+    return Inertia::render('admin/Dashboard');
+})->middleware(['auth', 'verified', 'admin'])->name('admin.dashboard');
+
+// Admin Routes
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin'])->group(function () {
+    // Event Management Routes
     Route::resource('events', EventController::class);
     Route::get('events-calendar', [EventController::class, 'calendar'])->name('events.calendar');
-});
-
-// Room Management Routes
-Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // Room Management Routes
     Route::resource('rooms', RoomController::class);
 });
 

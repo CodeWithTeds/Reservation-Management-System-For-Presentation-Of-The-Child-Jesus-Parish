@@ -8,6 +8,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { EventClickArg } from '@fullcalendar/core';
+import { route } from 'ziggy-js';
 
 type EventType = {
   id: number;
@@ -61,7 +62,7 @@ onMounted(() => {
     backgroundColor: getEventColor(event.event_type),
     borderColor: getEventColor(event.event_type),
     textColor: '#ffffff',
-    url: `/events/${event.id}`
+    url: route('admin.events.show', event.id)
   }));
 });
 
@@ -85,74 +86,76 @@ const handleEventClick = (info: EventClickArg): void => {
   info.jsEvent.preventDefault();
   // Navigate using Inertia instead
   const eventId = info.event.extendedProps.originalId;
-  router.visit(`/events/${eventId}`);
+  router.visit(route('admin.events.show', eventId));
 };
 </script>
 
 <template>
   <AppLayout>
+
     <Head title="Event Calendar" />
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-          <div class="p-6 bg-white border-b border-gray-200">
-            <div class="flex justify-between items-center mb-6">
-              <h1 class="text-2xl font-semibold text-gray-900">Event Calendar</h1>
+        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+          <div class="p-8 bg-white">
+            <div class="flex justify-between items-center mb-8">
+              <div>
+                <h1 class="text-3xl font-bold text-gray-900">Event Calendar</h1>
+                <div class="h-1 w-20 bg-indigo-500 mt-2 rounded"></div>
+              </div>
               <div class="flex space-x-4">
-                <Link href="/events">
-                  <Button variant="outline">List View</Button>
+                <Link :href="route('admin.events.index')">
+                <Button variant="outline" class="border-gray-300 text-gray-700 hover:bg-gray-100">List View</Button>
                 </Link>
-                <Link href="/events/create">
-                  <Button>Add New Event</Button>
+                <Link :href="route('admin.events.create')">
+                <Button class="bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500">Add New Event</Button>
                 </Link>
               </div>
             </div>
 
-            <div class="calendar-container">
-              <FullCalendar
-                :options="{
-                  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-                  initialView: 'dayGridMonth',
-                  headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                  },
-                  events: calendarEvents,
-                  eventClick: handleEventClick,
-                  height: 'auto',
-                  eventTimeFormat: {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    meridiem: 'short'
-                  }
-                }"
-              />
+            <div class="calendar-container rounded-lg shadow-md overflow-hidden border border-gray-200">
+              <FullCalendar :options="{
+                plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: calendarEvents,
+                eventClick: handleEventClick,
+                height: 'auto',
+                eventTimeFormat: {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  meridiem: 'short'
+                }
+              }" />
             </div>
 
-            <div class="mt-6">
-              <h2 class="text-lg font-medium text-gray-900 mb-3">Event Types</h2>
-              <div class="flex flex-wrap gap-4">
+            <div class="mt-8 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+              <h2 class="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">Event Types</h2>
+              <div class="flex flex-wrap gap-6">
                 <div class="flex items-center">
-                  <div class="w-4 h-4 rounded-full mr-2" style="background-color: #4f46e5"></div>
-                  <span>Mass</span>
+                  <div class="w-5 h-5 rounded-full mr-2 bg-indigo-600"></div>
+                  <span class="text-sm font-medium">Mass</span>
                 </div>
                 <div class="flex items-center">
-                  <div class="w-4 h-4 rounded-full mr-2" style="background-color: #ec4899"></div>
-                  <span>Wedding</span>
+                  <div class="w-5 h-5 rounded-full mr-2 bg-pink-500"></div>
+                  <span class="text-sm font-medium">Wedding</span>
                 </div>
                 <div class="flex items-center">
-                  <div class="w-4 h-4 rounded-full mr-2" style="background-color: #0ea5e9"></div>
-                  <span>Baptism</span>
+                  <div class="w-5 h-5 rounded-full mr-2 bg-sky-500"></div>
+                  <span class="text-sm font-medium">Baptism</span>
                 </div>
                 <div class="flex items-center">
-                  <div class="w-4 h-4 rounded-full mr-2" style="background-color: #f59e0b"></div>
-                  <span>Meeting</span>
+                  <div class="w-5 h-5 rounded-full mr-2 bg-amber-500"></div>
+                  <span class="text-sm font-medium">Meeting</span>
                 </div>
                 <div class="flex items-center">
-                  <div class="w-4 h-4 rounded-full mr-2" style="background-color: #6b7280"></div>
-                  <span>Other</span>
+                  <div class="w-5 h-5 rounded-full mr-2 bg-gray-500"></div>
+                  <span class="text-sm font-medium">Other</span>
                 </div>
               </div>
             </div>
@@ -164,7 +167,7 @@ const handleEventClick = (info: EventClickArg): void => {
 </template>
 
 <style>
-/* Add any custom styles for the calendar here */
+/* Using Tailwind classes for FullCalendar components */
 .fc-event {
   cursor: pointer;
 }
@@ -175,25 +178,25 @@ const handleEventClick = (info: EventClickArg): void => {
 
 .fc-toolbar-title {
   font-size: 1.5rem !important;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 .fc-button-primary {
-  background-color: #4f46e5 !important;
-  border-color: #4f46e5 !important;
+  background-color: rgb(79 70 229) !important;
+  border-color: rgb(79 70 229) !important;
 }
 
 .fc-button-primary:hover {
-  background-color: #4338ca !important;
-  border-color: #4338ca !important;
+  background-color: rgb(67 56 202) !important;
+  border-color: rgb(67 56 202) !important;
 }
 
 .fc-button-primary:disabled {
-  background-color: #6b7280 !important;
-  border-color: #6b7280 !important;
+  background-color: rgb(107 114 128) !important;
+  border-color: rgb(107 114 128) !important;
 }
 
 .fc-daygrid-day.fc-day-today {
-  background-color: rgba(79, 70, 229, 0.1) !important;
+  background-color: rgb(238 242 255) !important;
 }
 </style>

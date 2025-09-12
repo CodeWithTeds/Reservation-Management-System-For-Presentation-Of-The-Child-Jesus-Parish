@@ -3,6 +3,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
+import { route } from 'ziggy-js';
 
 interface Event {
   id: number;
@@ -60,10 +61,10 @@ const confirmDelete = (): boolean => confirm('Are you sure you want to delete th
             <div class="flex justify-between items-center mb-6">
               <h1 class="text-2xl font-semibold text-gray-900">Event Details</h1>
               <div class="flex space-x-4">
-                <Link :href="`/events/${event.id}/edit`">
+                <Link :href="route('admin.events.edit', event.id)">
                   <Button>Edit Event</Button>
                 </Link>
-                <Link href="/events">
+                <Link :href="route('admin.events.index')">
                   <Button variant="outline">Back to Events</Button>
                 </Link>
               </div>

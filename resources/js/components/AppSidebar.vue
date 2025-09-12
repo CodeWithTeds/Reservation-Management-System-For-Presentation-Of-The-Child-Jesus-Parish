@@ -26,20 +26,25 @@ const mainNavItems: NavItem[] = [
         dropdownItems: [
             {
                 title: 'All Events',
-                href: '/events',
+                href: route('admin.events.index'),
                 icon: ListFilter,
             },
             {
                 title: 'Create Event',
-                href: '/events/create',
+                href: route('admin.events.create'),
                 icon: PlusCircle,
+            },
+            {
+                title: 'Calendar View',
+                href: route('admin.events.calendar'),
+                icon: Calendar,
             },
         ],
     },
     // Room Management - simplified
     {
         title: 'Room Management',
-        href: '/rooms',
+        href: route('admin.rooms.index'),
         icon: BookOpen,
     },
     {

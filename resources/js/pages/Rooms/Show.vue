@@ -41,10 +41,10 @@ const getStatusClass = (status: string): string => {
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-2xl font-semibold text-gray-800">Room Details</h2>
               <div class="flex space-x-2">
-                <Link :href="route('rooms.edit', room.id)">
+                <Link :href="route('admin.rooms.edit', room.id)">
                   <Button variant="outline">Edit Room</Button>
                 </Link>
-                <Link :href="route('rooms.index')">
+                <Link :href="route('admin.rooms.index')">
                   <Button variant="secondary">Back to Rooms</Button>
                 </Link>
               </div>

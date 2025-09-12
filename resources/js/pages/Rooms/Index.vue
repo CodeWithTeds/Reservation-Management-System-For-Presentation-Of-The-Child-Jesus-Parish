@@ -43,7 +43,7 @@ const getStatusClass = (status: string): string => {
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-2xl font-semibold text-gray-800">Room Management</h2>
-                            <Link :href="route('rooms.create')">
+                            <Link :href="route('admin.rooms.create')">
                                 <Button>Add New Room</Button>
                             </Link>
                         </div>
@@ -85,9 +85,9 @@ const getStatusClass = (status: string): string => {
                                         </td>
                                         <td class="py-4 px-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">
-                                                <Link :href="route('rooms.edit', room.id)"
+                                                <Link :href="route('admin.rooms.edit', room.id)"
                                                     class="text-blue-600 hover:text-blue-900">Edit</Link>
-                                                <Link :href="route('rooms.destroy', room.id)" method="delete"
+                                                <Link :href="route('admin.rooms.destroy', room.id)" method="delete"
                                                     as="button" type="button" @click="confirmDelete"
                                                     class="text-red-600 hover:text-red-900">
                                                     Delete
@@ -98,7 +98,7 @@ const getStatusClass = (status: string): string => {
                                     <tr v-if="rooms.length === 0">
                                         <td colspan="4" class="py-4 px-4 text-center text-gray-500">
                                             No rooms found.
-                                            <Link :href="route('rooms.create')"
+                                            <Link :href="route('admin.rooms.create')"
                                                 class="text-indigo-600 hover:text-indigo-900">Create one</Link>.
                                         </td>
                                     </tr>
