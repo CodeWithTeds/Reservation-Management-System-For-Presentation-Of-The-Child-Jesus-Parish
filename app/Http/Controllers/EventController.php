@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::with(['creator', 'room'])->latest()->get();
-        
+
         return Inertia::render('Events/Index', [
             'events' => $events
         ]);
@@ -29,7 +29,7 @@ class EventController extends Controller
     {
         // Get all rooms that are not in maintenance
         $rooms = Room::where('status', '!=', 'maintenance')->get();
-        
+
         // Check for rooms that are occupied by ongoing events
         $rooms = $rooms->map(function ($room) {
             // Find any scheduled events that are currently using this room
@@ -38,19 +38,19 @@ class EventController extends Controller
                 ->where(function ($query) {
                     $query->where(function ($q) {
                         $q->whereDate('start_time', '<=', now())
-                          ->whereDate('end_time', '>=', now());
+                            ->whereDate('end_time', '>=', now());
                     });
                 })
                 ->exists();
-            
+
             // If room has an ongoing event, mark it as occupied
             if ($hasOngoingEvent && $room->status === 'available') {
                 $room->status = 'occupied';
             }
-            
+
             return $room;
         });
-        
+
         return Inertia::render('Events/Create', [
             'rooms' => $rooms
         ]);
@@ -73,13 +73,13 @@ class EventController extends Controller
             'activities' => 'nullable|string',
             'room_id' => 'nullable|exists:rooms,id',
         ]);
-        
+
         // Check for double booking if a room is selected
         if ($request->room_id) {
             $roomId = $request->room_id;
             $startTime = $request->start_time;
             $endTime = $request->end_time;
-            
+
             // Check if there are any overlapping events for this room
             $overlappingEvents = Event::where('room_id', $roomId)
                 ->where('status', '!=', 'cancelled')
@@ -88,11 +88,11 @@ class EventController extends Controller
                         ->orWhereBetween('end_time', [$startTime, $endTime])
                         ->orWhere(function ($q) use ($startTime, $endTime) {
                             $q->where('start_time', '<=', $startTime)
-                              ->where('end_time', '>=', $endTime);
+                                ->where('end_time', '>=', $endTime);
                         });
                 })
                 ->exists();
-                
+
             if ($overlappingEvents) {
                 return back()->withErrors([
                     'room_id' => 'This room is already booked during the selected time period.'
@@ -114,7 +114,7 @@ class EventController extends Controller
             }
         }
 
-        return redirect()->route('events.index')
+        return redirect()->route('admin.events.index')
             ->with('success', 'Event created successfully.');
     }
 
@@ -135,7 +135,7 @@ class EventController extends Controller
     {
         // Get all rooms that are not in maintenance
         $rooms = Room::where('status', '!=', 'maintenance')->get();
-        
+
         // Check for rooms that are occupied by ongoing events
         $rooms = $rooms->map(function ($room) use ($event) {
             // Find any scheduled events that are currently using this room (excluding the current event)
@@ -145,19 +145,19 @@ class EventController extends Controller
                 ->where(function ($query) {
                     $query->where(function ($q) {
                         $q->whereDate('start_time', '<=', now())
-                          ->whereDate('end_time', '>=', now());
+                            ->whereDate('end_time', '>=', now());
                     });
                 })
                 ->exists();
-            
+
             // If room has an ongoing event, mark it as occupied
             if ($hasOngoingEvent && $room->status === 'available') {
                 $room->status = 'occupied';
             }
-            
+
             return $room;
         });
-        
+
         return Inertia::render('Events/Edit', [
             'event' => $event,
             'rooms' => $rooms
@@ -181,18 +181,20 @@ class EventController extends Controller
             'activities' => 'nullable|string',
             'room_id' => 'nullable|exists:rooms,id',
         ]);
-        
+ 
         // Check for double booking if a room is selected and it's different from the current room
         // or if the event times have changed
-        if ($request->room_id && 
-            ($request->room_id != $event->room_id || 
-             $request->start_time != $event->start_time || 
-             $request->end_time != $event->end_time)) {
-            
+        if (
+            $request->room_id &&
+            ($request->room_id != $event->room_id ||
+                $request->start_time != $event->start_time ||
+                $request->end_time != $event->end_time)
+        ) {
+
             $roomId = $request->room_id;
             $startTime = $request->start_time;
             $endTime = $request->end_time;
-            
+
             // Check if there are any overlapping events for this room, excluding the current event
             $overlappingEvents = Event::where('room_id', $roomId)
                 ->where('id', '!=', $event->id)
@@ -202,11 +204,11 @@ class EventController extends Controller
                         ->orWhereBetween('end_time', [$startTime, $endTime])
                         ->orWhere(function ($q) use ($startTime, $endTime) {
                             $q->where('start_time', '<=', $startTime)
-                              ->where('end_time', '>=', $endTime);
+                                ->where('end_time', '>=', $endTime);
                         });
                 })
                 ->exists();
-                
+
             if ($overlappingEvents) {
                 return back()->withErrors([
                     'room_id' => 'This room is already booked during the selected time period.'
@@ -221,7 +223,7 @@ class EventController extends Controller
         $event->update($validated);
 
         // Handle room status changes
-        
+
         // If the event was completed, make the old room available again
         if ($oldRoomId && $event->status === 'completed') {
             $oldRoom = Room::find($oldRoomId);
@@ -231,14 +233,14 @@ class EventController extends Controller
                     ->where('id', '!=', $event->id)
                     ->where('status', '!=', 'completed')
                     ->exists();
-                
+
                 if (!$hasOtherEvents) {
                     $oldRoom->status = 'available';
                     $oldRoom->save();
                 }
             }
         }
-        
+
         // If room was changed or newly assigned and event is not completed
         if ($event->room_id && $event->room_id !== $oldRoomId && $event->status !== 'completed') {
             $newRoom = Room::find($event->room_id);
@@ -248,7 +250,7 @@ class EventController extends Controller
             }
         }
 
-        return redirect()->route('events.index')
+        return redirect()->route('admin.events.index')
             ->with('success', 'Event updated successfully.');
     }
 
@@ -266,27 +268,27 @@ class EventController extends Controller
                     ->where('id', '!=', $event->id)
                     ->where('status', '!=', 'completed')
                     ->exists();
-                
+
                 if (!$hasOtherEvents) {
                     $room->status = 'available';
                     $room->save();
                 }
             }
         }
-        
+
         $event->delete();
 
-        return redirect()->route('events.index')
+        return redirect()->route('admin.events.index')
             ->with('success', 'Event deleted successfully.');
     }
-    
+
     /**
      * Display events in calendar format.
      */
     public function calendar()
     {
         $events = Event::all();
-        
+
         return Inertia::render('Events/Calendar', [
             'events' => $events
         ]);
