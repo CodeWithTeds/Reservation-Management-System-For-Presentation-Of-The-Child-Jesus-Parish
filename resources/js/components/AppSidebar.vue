@@ -51,6 +51,12 @@ const adminNavItems: NavItem[] = [
         href: route('admin.rooms.index'),
         icon: BookOpen,
     },
+    // Services Management
+    {
+        title: 'Services Management',
+        href: route('admin.services.index'),
+        icon: ShoppingCart,
+    },
     {
         title: 'Reservation System',
         href: '/reservations',

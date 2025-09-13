@@ -35,6 +35,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
     
     // Room Management Routes
     Route::resource('rooms', RoomController::class);
+    
+    // Service Management Routes
+    Route::resource('services', App\Http\Controllers\ServiceController::class);
 });
 
 // Client Routes
