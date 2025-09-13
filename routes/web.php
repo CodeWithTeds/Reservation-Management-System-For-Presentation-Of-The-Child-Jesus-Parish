@@ -38,6 +38,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
     
     // Service Management Routes
     Route::resource('services', App\Http\Controllers\ServiceController::class);
+
+    // Reservation Management Routes (Admin)
+    Route::resource('reservations', App\Http\Controllers\Admin\ReservationController::class)->only(['index','update','destroy']);
+    Route::patch('reservations/{reservation}/approve', [App\Http\Controllers\Admin\ReservationController::class, 'approve'])->name('reservations.approve');
+    Route::patch('reservations/{reservation}/cancel', [App\Http\Controllers\Admin\ReservationController::class, 'cancel'])->name('reservations.cancel');
 });
 
 // Client Routes
@@ -53,14 +58,14 @@ Route::prefix('client')->name('client.')->middleware(['auth', 'verified', 'clien
     })->name('events');
     
     // Client Reservations
-    Route::get('reservations', function () {
-        return Inertia::render('client/Reservations');
-    })->name('reservations');
+    Route::get('reservations', [\App\Http\Controllers\ReservationController::class, 'index'])->name('reservations');
+    Route::get('reservations/create', [\App\Http\Controllers\ReservationController::class, 'create'])->name('reservations.create');
+    Route::post('reservations', [\App\Http\Controllers\ReservationController::class, 'store'])->name('reservations.store');
+    Route::get('reservations/{reservation}', [\App\Http\Controllers\ReservationController::class, 'show'])->name('reservations.show');
+    Route::patch('reservations/{reservation}/cancel', [\App\Http\Controllers\ReservationController::class, 'cancel'])->name('reservations.cancel');
     
-    // Book a Room
-    Route::get('book', function () {
-        return Inertia::render('client/BookRoom');
-    })->name('book');
+    // Book a Room (use controller so services are provided)
+    Route::get('book', [\App\Http\Controllers\ReservationController::class, 'create'])->name('book');
     
     // Client Notifications
     Route::get('notifications', function () {

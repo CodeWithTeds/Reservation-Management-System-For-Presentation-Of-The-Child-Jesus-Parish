@@ -38,3 +38,15 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+export interface Reservation {
+    reservation_id: number;
+    user_id: number;
+    service_id: number;
+    date_reserved: string;
+    time_start: string;
+    time_end: string;
+    status: 'Pending' | 'Approved' | 'Cancelled';
+    remarks?: string;
+    service_name?: string;
+}
