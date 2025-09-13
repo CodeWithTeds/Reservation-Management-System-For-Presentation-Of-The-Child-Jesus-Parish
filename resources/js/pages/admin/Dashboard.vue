@@ -4,6 +4,7 @@ import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
+import { route } from 'ziggy-js';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,17 +20,17 @@ const breadcrumbs: BreadcrumbItem[] = [
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <a href="route('admin.events.index')" class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white dark:bg-gray-800 p-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow">
+                <a :href="route('admin.reservations.index')" class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white dark:bg-gray-800 p-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow">
                     <div class="text-3xl mb-2">📅</div>
-                    <h3 class="text-lg font-semibold">Event Management</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">Manage events and schedules</p>
+                    <h3 class="text-lg font-semibold">Reservation Management</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">Approve or cancel reservations</p>
                 </a>
-                <a href="route('admin.rooms.index')" class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white dark:bg-gray-800 p-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow">
+                <a :href="route('admin.rooms.index')" class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white dark:bg-gray-800 p-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow">
                     <div class="text-3xl mb-2">🏠</div>
                     <h3 class="text-lg font-semibold">Room Management</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">Manage rooms and facilities</p>
                 </a>
-                <a href="route('admin.services.index')" class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white dark:bg-gray-800 p-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow">
+                <a :href="route('admin.services.index')" class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white dark:bg-gray-800 p-4 flex flex-col items-center justify-center hover:shadow-lg transition-shadow">
                     <div class="text-3xl mb-2">✨</div>
                     <h3 class="text-lg font-semibold">Service Management</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">Manage services and offerings</p>
