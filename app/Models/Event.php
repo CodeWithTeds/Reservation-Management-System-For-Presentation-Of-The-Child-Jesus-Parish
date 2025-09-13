@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Room;
 
 class Event extends Model
 {
+    use HasFactory;
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -25,6 +29,38 @@ class Event extends Model
         'activities',
         'room_id',
     ];
+    
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::updated(function ($event) {
+            // If the event status was changed to completed or cancelled
+            if ($event->isDirty('status') && 
+                ($event->status === 'completed' || $event->status === 'cancelled') && 
+                $event->room_id) {
+                
+                // Update the room status if needed
+                $room = Room::find($event->room_id);
+                if ($room && $room->status === 'occupied') {
+                    // Check if there are other ongoing events for this room
+                    $hasOtherEvents = self::where('room_id', $event->room_id)
+                        ->where('id', '!=', $event->id)
+                        ->where('status', '!=', 'completed')
+                        ->where('status', '!=', 'cancelled')
+                        ->exists();
+
+                    if (!$hasOtherEvents) {
+                        $room->status = 'available';
+                        $room->save();
+                    }
+                }
+            }
+        });
+    }
 
     /**
      * The attributes that should be cast.

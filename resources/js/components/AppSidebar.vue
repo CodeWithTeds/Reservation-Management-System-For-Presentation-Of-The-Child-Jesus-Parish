@@ -6,12 +6,16 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
-import { Bell, BookOpen, Calendar, CalendarCheck, Folder, LayoutGrid, Users, ChevronsUpDown, PlusCircle, ListFilter } from 'lucide-vue-next';
+import { Link, usePage } from '@inertiajs/vue3';
+import { Bell, BookOpen, Calendar, CalendarCheck, Folder, LayoutGrid, Users, ChevronsUpDown, PlusCircle, ListFilter, Home, ShoppingCart } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { route } from 'ziggy-js';
 
-const mainNavItems: NavItem[] = [
+const page = usePage();
+const user = page.props.auth.user;
+
+// Admin navigation items
+const adminNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
@@ -64,17 +68,39 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
+// Client navigation items
+const clientNavItems: NavItem[] = [
+    {
+        title: 'Home',
+        href: dashboard(),
+        icon: Home,
+    },
+    {
+        title: 'Events',
+        href: route('client.events'),
+        icon: Calendar,
+    },
+    {
+        title: 'My Reservations',
+        href: route('client.reservations'),
+        icon: CalendarCheck,
+    },
+    {
+        title: 'Book a Room',
+        href: route('client.book'),
+        icon: ShoppingCart,
+    },
+    {
+        title: 'Notifications',
+        href: route('client.notifications'),
+        icon: Bell,
+    },
+];
+
+// Determine which navigation items to show based on user role
+const mainNavItems = user.role === 'admin' ? adminNavItems : clientNavItems;
+
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
 ];
 </script>
 

@@ -47,23 +47,26 @@ const calendarEvents = ref<CalendarEventType[]>([]);
 
 onMounted(() => {
   // Transform the events data to the format expected by FullCalendar
-  calendarEvents.value = props.events.map(event => ({
-    id: String(event.id), // Convert to string for FullCalendar
-    title: event.title,
-    start: event.start_time,
-    end: event.end_time,
-    extendedProps: {
-      description: event.description,
-      location: event.location,
-      event_type: event.event_type,
-      status: event.status,
-      originalId: event.id // Keep original numeric ID
-    },
-    backgroundColor: getEventColor(event.event_type),
-    borderColor: getEventColor(event.event_type),
-    textColor: '#ffffff',
-    url: route('admin.events.show', event.id)
-  }));
+  // Filter out completed or cancelled events
+  calendarEvents.value = props.events
+    .filter(event => event.status !== 'completed' && event.status !== 'cancelled')
+    .map(event => ({
+      id: String(event.id), // Convert to string for FullCalendar
+      title: event.title,
+      start: event.start_time,
+      end: event.end_time,
+      extendedProps: {
+        description: event.description,
+        location: event.location,
+        event_type: event.event_type,
+        status: event.status,
+        originalId: event.id // Keep original numeric ID
+      },
+      backgroundColor: getEventColor(event.event_type),
+      borderColor: getEventColor(event.event_type),
+      textColor: '#ffffff',
+      url: route('admin.events.show', event.id)
+    }));
 });
 
 const getEventColor = (eventType: string): string => {
@@ -119,9 +122,8 @@ const handleEventClick = (info: EventClickArg): void => {
                 plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
                 initialView: 'dayGridMonth',
                 headerToolbar: {
-                  left: 'prev,next today',
                   center: 'title',
-                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+
                 },
                 events: calendarEvents,
                 eventClick: handleEventClick,

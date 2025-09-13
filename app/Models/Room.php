@@ -34,9 +34,12 @@ class Room extends Model
      */
     public function isOccupied(): bool
     {
-        return $this->status === 'occupied' || $this->events()->where(function ($query) {
-            $query->whereDate('start_time', '<=', now())
-                ->whereDate('end_time', '>=', now());
-        })->exists();
+        return $this->status === 'occupied' || $this->events()
+            ->where('status', '!=', 'completed')
+            ->where('status', '!=', 'cancelled')
+            ->where(function ($query) {
+                $query->whereDate('start_time', '<=', now())
+                    ->whereDate('end_time', '>=', now());
+            })->exists();
     }
 }
