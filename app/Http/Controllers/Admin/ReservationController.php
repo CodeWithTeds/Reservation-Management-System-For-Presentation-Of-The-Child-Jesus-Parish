@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationApproved;
 
 class ReservationController extends Controller
 {
@@ -51,6 +53,14 @@ class ReservationController extends Controller
         if ($reservation->status !== 'Approved') {
             $reservation->status = 'Approved';
             $reservation->save();
+
+            // Ensure we have related user and service for the email
+            $reservation->loadMissing(['user', 'service']);
+
+            // Send approval email to the reservation owner
+            if ($reservation->user && $reservation->user->email) {
+                Mail::to($reservation->user->email)->send(new ReservationApproved($reservation));
+            }
         }
         return redirect()->back()->with('success', 'Reservation approved.');
     }

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <circle cx="250" cy="250" r="240" fill="#FFD633" />
+  <path d="M250 30C128.5 30 30 128.5 30 250s98.5 220 220 220 220-98.5 220-220S371.5 30 250 30zm0 420c-110.5 0-200-89.5-200-200S139.5 50 250 50s200 89.5 200 200-89.5 200-200 200z" fill="#8B0000"/>
+  <text x="250" y="150" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#8B0000">PRESENTATION OF THE CHILD</text>
+  <text x="250" y="180" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#8B0000">JESUS PARISH</text>
+  <text x="250" y="350" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#8B0000">DIOCESE OF PARANAQUE</text>
+  <g transform="translate(250, 250) scale(0.6)">
+    <rect x="-40" y="-120" width="30" height="120" fill="#8B0000" />
+    <rect x="-40" y="-120" width="80" height="30" fill="#8B0000" />
+    <circle cx="0" cy="-30" r="40" fill="#FFD633" stroke="#8B0000" stroke-width="5" />
+    <circle cx="-60" cy="0" r="30" fill="#FFD633" stroke="#8B0000" stroke-width="5" />
+    <circle cx="60" cy="0" r="30" fill="#FFD633" stroke="#8B0000" stroke-width="5" />
+  </g>
+</svg>

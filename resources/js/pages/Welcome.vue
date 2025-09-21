@@ -16,7 +16,8 @@ import { Head, Link } from '@inertiajs/vue3';
         <header class="bg-[#0033A0] text-white shadow-md">
             <div class="container mx-auto px-4 py-4 flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <div class="text-[#FFD633] text-2xl font-bold">PCJP</div>
+                    <img src="images/logo.png" alt="logo" class="w-12 h-12">
+
                     <h1 class="text-xl font-semibold hidden sm:block">Reservation Management System</h1>
                 </div>
                 <nav class="flex items-center space-x-4">
@@ -59,11 +60,11 @@ import { Head, Link } from '@inertiajs/vue3';
                 </div>
                 <div class="md:w-1/2 flex justify-center">
                     <div class="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden">
-                        <div class="p-1 bg-[#FFD633]"></div>
+
                         <div class="p-8">
                             <div class="flex justify-center mb-6">
                                 <div class="h-24 w-24 rounded-full bg-[#0033A0] flex items-center justify-center">
-                                    <span class="text-[#FFD633] text-4xl font-bold">PCJP</span>
+                                    <img src="images/logo.png" alt="logo" class="w-20 h-20">
                                 </div>
                             </div>
                             <h3 class="text-[#333333] text-xl font-bold text-center mb-4">Presentation Of The Child
@@ -152,7 +153,7 @@ import { Head, Link } from '@inertiajs/vue3';
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="mb-4 md:mb-0">
                         <h3 class="text-xl font-bold flex items-center">
-                            <span class="text-[#FFD633] mr-2">PCJP</span> Reservation System
+                            <span class="text-[#FFD633] mr-2">add logo here</span> Reservation System
                         </h3>
                         <p class="text-sm text-gray-400">Presentation Of The Child Jesus Parish</p>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
@@ -36,4 +37,12 @@ class Service extends Model
     protected $casts = [
         'capacity' => 'integer',
     ];
+
+    /**
+     * Get the reservations associated with this service.
+     */
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class, 'service_id', 'service_id');
+    }
 }

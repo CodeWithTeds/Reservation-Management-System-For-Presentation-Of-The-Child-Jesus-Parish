@@ -4,6 +4,7 @@ import { Head, useForm, Link } from '@inertiajs/vue3';
 import { type BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
 import { route } from 'ziggy-js';
+
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Dashboard',

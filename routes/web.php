@@ -18,14 +18,9 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('admin/dashboard', function () {
-    // Debug the user role
-    if (Auth::check()) {
-        // Log or dump the user role for debugging
-        // dd(Auth::user()->role);
-    }
-    return Inertia::render('admin/Dashboard');
-})->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::get('admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('admin.dashboard');
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin'])->group(function () {

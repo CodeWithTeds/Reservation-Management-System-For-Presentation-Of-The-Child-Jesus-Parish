@@ -30,7 +30,7 @@ defineProps<{
             </div>
             <div
                 class="hidden bg-muted lg:block h-full bg-cover bg-center"
-                style="background-image: url('/images/background.png');"
+                style="background-image: url('/images/g.png');"
             >
             </div>
         </div>
