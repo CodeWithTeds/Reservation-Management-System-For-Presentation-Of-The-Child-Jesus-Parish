@@ -36,6 +36,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
 
     // Reservation Management Routes (Admin)
     Route::resource('reservations', App\Http\Controllers\Admin\ReservationController::class)->only(['index','update','destroy']);
+
+    // User Management Routes
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class)->only(['index', 'show', 'destroy']);
     Route::patch('reservations/{reservation}/approve', [App\Http\Controllers\Admin\ReservationController::class, 'approve'])->name('reservations.approve');
     Route::patch('reservations/{reservation}/cancel', [App\Http\Controllers\Admin\ReservationController::class, 'cancel'])->name('reservations.cancel');
 });

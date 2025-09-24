@@ -69,9 +69,9 @@ const adminNavItems: NavItem[] = [
     },
     {
         title: 'User Management',
-        href: '/users',
+        href: route('admin.users.index'),
         icon: Users,
-    },
+    }
 ];
 
 // Client navigation items
