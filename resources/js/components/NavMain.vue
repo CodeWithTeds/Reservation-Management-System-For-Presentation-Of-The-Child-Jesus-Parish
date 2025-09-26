@@ -11,6 +11,8 @@ defineProps<{
 }>();
 
 const page = usePage();
+const notificationCount = (page.props.notificationCount as number) || 0;
+const isClient = (page.props.auth?.user?.role === 'client');
 </script>
 
 <template>
@@ -21,9 +23,15 @@ const page = usePage();
                 <!-- Regular menu item without dropdown -->
                 <SidebarMenuButton v-if="!item.hasDropdown" as-child :is-active="urlIsActive(item.href, page.url)"
                     :tooltip="item.title">
-                    <Link :href="item.href">
-                    <component :is="item.icon" />
-                    <span>{{ item.title }}</span>
+                    <Link :href="item.href" class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <component :is="item.icon" />
+                            <span>{{ item.title }}</span>
+                        </div>
+                        <span v-if="item.title === 'Notifications' && isClient && notificationCount > 0"
+                              class="ml-2 inline-flex items-center rounded-full bg-red-600 px-2 py-0.5 text-xs font-semibold text-white">
+                            {{ notificationCount }}
+                        </span>
                     </Link>
                 </SidebarMenuButton>
 

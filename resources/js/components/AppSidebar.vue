@@ -63,14 +63,19 @@ const adminNavItems: NavItem[] = [
         icon: CalendarCheck,
     },
     {
-        title: 'Notification System',
-        href: '/notifications',
-        icon: Bell,
-    },
-    {
         title: 'User Management',
         href: route('admin.users.index'),
         icon: Users,
+    },
+    {
+        title: 'Livestream',
+        href: route('admin.livestreams.create'),
+        icon: Calendar,
+    },
+    {
+        title: 'Notifications',
+        href: route('admin.notifications.create'),
+        icon: Bell,
     }
 ];
 
@@ -80,11 +85,6 @@ const clientNavItems: NavItem[] = [
         title: 'Home',
         href: dashboard(),
         icon: Home,
-    },
-    {
-        title: 'Events',
-        href: route('client.events'),
-        icon: Calendar,
     },
     {
         title: 'My Reservations',
@@ -100,6 +100,11 @@ const clientNavItems: NavItem[] = [
         title: 'Notifications',
         href: route('client.notifications'),
         icon: Bell,
+    },
+    {
+        title: 'Livestream',
+        href: route('livestream'),
+        icon: Calendar,
     },
 ];
 
