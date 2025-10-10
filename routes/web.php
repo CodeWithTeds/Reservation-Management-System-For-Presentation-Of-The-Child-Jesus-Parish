@@ -5,6 +5,7 @@ use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Reservation;
 
 Route::get('/', function () {
     // Get the latest livestream marked as live or, if none live, the latest scheduled/created
@@ -101,7 +102,57 @@ Route::get('dashboard', function () {
     if (Auth::check() && Auth::user()->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
-    return Inertia::render('Dashboard');
+
+    $user = Auth::user();
+
+    // Fetch user-specific reservations with service info
+    $reservationsQuery = Reservation::with('service')
+        ->where('user_id', optional($user)->id)
+        ->orderBy('date_reserved', 'desc');
+
+    $reservations = $reservationsQuery->get()->map(function ($reservation) {
+        return [
+            'reservation_id' => $reservation->reservation_id,
+            'service_id' => $reservation->service_id,
+            'service_name' => optional($reservation->service)->service_type,
+            'date_reserved' => optional($reservation->date_reserved)?->format('Y-m-d'),
+            'time_start' => optional($reservation->time_start)?->format('H:i'),
+            'time_end' => optional($reservation->time_end)?->format('H:i'),
+            'status' => $reservation->status,
+            'remarks' => $reservation->remarks,
+        ];
+    });
+
+    $stats = [
+        'total' => $reservations->count(),
+        'pending' => $reservations->where('status', 'Pending')->count(),
+        'approved' => $reservations->where('status', 'Approved')->count(),
+        'cancelled' => $reservations->where('status', 'Cancelled')->count(),
+    ];
+
+    // Upcoming reservations (next 3)
+    $upcoming = $reservationsQuery->clone()
+        ->where('status', '!=', 'Cancelled')
+        ->whereDate('date_reserved', '>=', now()->toDateString())
+        ->orderBy('date_reserved')
+        ->limit(3)
+        ->get()
+        ->map(function ($reservation) {
+            return [
+                'reservation_id' => $reservation->reservation_id,
+                'service_name' => optional($reservation->service)->service_type,
+                'date_reserved' => optional($reservation->date_reserved)?->format('Y-m-d'),
+                'time_start' => optional($reservation->time_start)?->format('H:i'),
+                'time_end' => optional($reservation->time_end)?->format('H:i'),
+                'status' => $reservation->status,
+            ];
+        });
+
+    return Inertia::render('client/Dashboard', [
+        'reservations' => $reservations,
+        'stats' => $stats,
+        'upcoming' => $upcoming,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
@@ -140,9 +191,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
 // Client Routes
 Route::prefix('client')->name('client.')->middleware(['auth', 'verified', 'client'])->group(function () {
     // Client Dashboard
-    Route::get('dashboard', function () {
-        return Inertia::render('client/Dashboard');
-    })->name('dashboard');
     
     // Client Events
     Route::get('events', function () {
