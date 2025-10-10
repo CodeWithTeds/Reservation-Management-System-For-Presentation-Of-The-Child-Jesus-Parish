@@ -25,7 +25,7 @@ const isClient = (page.props.auth?.user?.role === 'client');
                     :tooltip="item.title">
                     <Link :href="item.href" class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <component :is="item.icon" />
+                            <component :is="item.icon" class="mr-2 h-5 w-5" />
                             <span>{{ item.title }}</span>
                         </div>
                         <span v-if="item.title === 'Notifications' && isClient && notificationCount > 0"
@@ -40,7 +40,7 @@ const isClient = (page.props.auth?.user?.role === 'client');
                     <DropdownMenuTrigger as-child>
                         <SidebarMenuButton
                             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                            <component :is="item.icon" />
+                            <component :is="item.icon" class="h-5 w-5" />
                             <span>{{ item.title }}</span>
                             <ChevronsUpDown class="ml-auto size-4" />
                         </SidebarMenuButton>

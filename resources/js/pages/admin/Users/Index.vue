@@ -40,6 +40,10 @@ const onDelete = (id: number) => {
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold">Users</h1>
+        <Link :href="route('admin.users.create')"
+              class="px-4 py-2 rounded-md bg-[#0033A0] text-white hover:brightness-110 transition">
+          Create Staff
+        </Link>
       </div>
 
       <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">

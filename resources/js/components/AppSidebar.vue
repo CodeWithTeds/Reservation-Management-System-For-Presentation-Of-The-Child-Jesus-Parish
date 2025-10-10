@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { Bell, BookOpen, Calendar, CalendarCheck, Folder, LayoutGrid, Users, ChevronsUpDown, PlusCircle, ListFilter, Home, ShoppingCart } from 'lucide-vue-next';
+import { Bell, BookOpen, Calendar, CalendarCheck, Folder, LayoutGrid, Users, ChevronsUpDown, PlusCircle, ListFilter, Home, ShoppingCart, Video } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { route } from 'ziggy-js';
 
@@ -70,7 +70,7 @@ const adminNavItems: NavItem[] = [
     {
         title: 'Livestream',
         href: route('admin.livestreams.create'),
-        icon: Calendar,
+        icon: Video,
     },
     {
         title: 'Notifications',
@@ -104,7 +104,7 @@ const clientNavItems: NavItem[] = [
     {
         title: 'Livestream',
         href: route('livestream'),
-        icon: Calendar,
+        icon: Video,
     },
 ];
 
