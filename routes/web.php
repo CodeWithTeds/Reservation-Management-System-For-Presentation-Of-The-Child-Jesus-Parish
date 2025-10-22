@@ -98,9 +98,14 @@ Route::get('/livestream-display', function () {
 })->name('livestream.display');
 
 Route::get('dashboard', function () {
-    // Redirect admin users to admin dashboard, client users to client dashboard
-    if (Auth::check() && Auth::user()->role === 'admin') {
-        return redirect()->route('admin.dashboard');
+    // Redirect based on role
+    if (Auth::check()) {
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        if (Auth::user()->role === 'staff') {
+            return redirect()->route('staff.dashboard');
+        }
     }
 
     $user = Auth::user();
@@ -186,6 +191,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
     // Notifications Management Routes
     Route::get('notifications/create', [App\Http\Controllers\Admin\NotificationController::class, 'create'])->name('notifications.create');
     Route::post('notifications', [App\Http\Controllers\Admin\NotificationController::class, 'store'])->name('notifications.store');
+});
+
+// Staff Routes (URL alias to admin management with staff-friendly prefix)
+Route::prefix('staff')->name('staff.')->middleware(['auth', 'verified', 'admin'])->group(function () {
+    // Staff Dashboard (shares admin dashboard UI)
+    Route::get('dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Room Management (same controller as admin)
+    Route::resource('rooms', RoomController::class);
+
+    // Service Management (same controller as admin)
+    Route::resource('services', \App\Http\Controllers\ServiceController::class);
+
+    // Reservation Management (Admin controller UI)
+    Route::resource('reservations', \App\Http\Controllers\Admin\ReservationController::class)->only(['index','update','destroy']);
 });
 
 // Client Routes

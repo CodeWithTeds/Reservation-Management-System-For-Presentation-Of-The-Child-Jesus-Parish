@@ -43,16 +43,16 @@ const formattedSchedule = computed(() => {
 });
 
 const embedUrl = computed(() => {
-    if (!props.livestream?.url || !isLivestreamAvailable.value) return null;
+    const href = props.livestream?.url;
+    if (!href) return null;
     try {
-        const url = new URL(props.livestream.url);
-        // If it's a Facebook watch/livestream URL, convert to plugins/video.php embed
-        if (props.livestream.url.includes('facebook.com')) {
-            // Encode original URL for fb embed plugin
-            const encoded = encodeURIComponent(props.livestream.url);
+        const url = new URL(href);
+        // Support Facebook watch/livestream URLs and fb.watch short links
+        if (href.includes('facebook.com') || url.host.includes('fb.watch')) {
+            const encoded = encodeURIComponent(href);
             return `https://www.facebook.com/plugins/video.php?href=${encoded}&show_text=false&height=450&width=800&autoplay=true`;
         }
-        // Fallback to the given URL
+        // Fallback to the given URL (if iframe-embeddable)
         return url.toString();
     } catch (e) {
         return null;
@@ -194,7 +194,7 @@ const embedUrl = computed(() => {
         <section class="py-16 bg-gray-50">
             <div class="container mx-auto px-4">
                 <h2 class="text-3xl font-bold text-center text-[#333333] mb-8">Parish Livestream</h2>
-                <div v-if="livestream && embedUrl" class="flex flex-col md:flex-row gap-8">
+                <div v-if="livestream" class="flex flex-col md:flex-row gap-8">
                     <!-- Left Column - Text Content -->
                     <div class="md:w-1/2">
                         <h3 class="text-2xl font-bold text-[#0033A0] mb-4">{{ livestream.title || 'Parish Livestream' }}

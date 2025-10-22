@@ -15,7 +15,8 @@ class CheckAdminRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user() && $request->user()->role === 'admin') {
+        // Allow both admin and staff roles to access admin routes
+        if ($request->user() && in_array($request->user()->role, ['admin', 'staff'], true)) {
             return $next($request);
         }
 

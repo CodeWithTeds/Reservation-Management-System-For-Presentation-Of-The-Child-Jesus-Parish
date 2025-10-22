@@ -25,7 +25,7 @@ const isClient = (page.props.auth?.user?.role === 'client');
                     :tooltip="item.title">
                     <Link :href="item.href" class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <component :is="item.icon" class="mr-2 h-5 w-5" />
+                            <component :is="item.icon" class="mr-2 h-5 w-5" :size="20" />
                             <span>{{ item.title }}</span>
                         </div>
                         <span v-if="item.title === 'Notifications' && isClient && notificationCount > 0"
@@ -40,16 +40,16 @@ const isClient = (page.props.auth?.user?.role === 'client');
                     <DropdownMenuTrigger as-child>
                         <SidebarMenuButton
                             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                            <component :is="item.icon" class="h-5 w-5" />
+                            <component :is="item.icon" class="h-5 w-5" :size="20" />
                             <span>{{ item.title }}</span>
-                            <ChevronsUpDown class="ml-auto size-4" />
+                            <ChevronsUpDown class="ml-auto size-5" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent class="min-w-48 rounded-lg" side="right" align="start" :side-offset="4">
                         <DropdownMenuItem v-for="dropdownItem in item.dropdownItems" :key="dropdownItem.title"
                             :as-child="true">
                             <Link class="block w-full" :href="dropdownItem.href">
-                            <component v-if="dropdownItem.icon" :is="dropdownItem.icon" class="mr-2 h-4 w-4" />
+                            <component v-if="dropdownItem.icon" :is="dropdownItem.icon" class="mr-2 h-5 w-5" :size="20" />
                             {{ dropdownItem.title }}
                             </Link>
                         </DropdownMenuItem>

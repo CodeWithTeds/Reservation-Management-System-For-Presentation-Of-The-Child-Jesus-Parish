@@ -108,8 +108,32 @@ const clientNavItems: NavItem[] = [
     },
 ];
 
+// Staff navigation items (limited management access)
+const staffNavItems: NavItem[] = [
+  {
+    title: 'Dashboard',
+    href: route('staff.dashboard'),
+    icon: LayoutGrid,
+  },
+    {
+        title: 'Room Management',
+        href: route('staff.rooms.index'),
+        icon: BookOpen,
+    },
+    {
+        title: 'Services Management',
+        href: route('staff.services.index'),
+        icon: ShoppingCart,
+    },
+    {
+        title: 'Reservation System',
+        href: route('staff.reservations.index'),
+        icon: CalendarCheck,
+    },
+];
+
 // Determine which navigation items to show based on user role
-const mainNavItems = user.role === 'admin' ? adminNavItems : clientNavItems;
+const mainNavItems = user.role === 'admin' ? adminNavItems : (user.role === 'staff' ? staffNavItems : clientNavItems);
 
 const footerNavItems: NavItem[] = [
 ];
