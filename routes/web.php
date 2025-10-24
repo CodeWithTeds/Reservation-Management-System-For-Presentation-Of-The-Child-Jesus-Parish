@@ -214,8 +214,17 @@ Route::prefix('client')->name('client.')->middleware(['auth', 'verified', 'clien
     
     // Client Events
     Route::get('events', function () {
-        return Inertia::render('client/Events');
+        $events = \App\Models\Event::with(['room', 'creator'])
+            ->where('created_by', Auth::id())
+            ->latest()
+            ->get();
+        return Inertia::render('client/Events', [
+            'events' => $events,
+        ]);
     })->name('events');
+    // Add client event creation and storage
+    Route::get('events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('events', [EventController::class, 'store'])->name('events.store');
     
     // Client Reservations
     Route::get('reservations', [\App\Http\Controllers\ReservationController::class, 'index'])->name('reservations');

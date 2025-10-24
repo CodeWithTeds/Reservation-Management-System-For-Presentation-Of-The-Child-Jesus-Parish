@@ -100,6 +100,12 @@ class EventController extends Controller
             }
         }
 
+        // Enforce defaults for client submissions
+        if (optional(Auth::user())->role === 'client') {
+            $validated['status'] = 'scheduled';
+            $validated['priest_name'] = null;
+        }
+
         $event = Event::create([
             ...$validated,
             'created_by' => Auth::id(),
@@ -114,7 +120,10 @@ class EventController extends Controller
             }
         }
 
-        return redirect()->route('admin.events.index')
+        $userRole = optional(Auth::user())->role;
+        $redirectRoute = $userRole === 'client' ? 'client.events' : 'admin.events.index';
+
+        return redirect()->route($redirectRoute)
             ->with('success', 'Event created successfully.');
     }
 

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { Head, useForm, Link } from '@inertiajs/vue3';
+import { Head, useForm, Link, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Textarea from '@/components/ui/textarea/textarea.vue';
 import { route } from 'ziggy-js';
+import { computed } from 'vue';
 
 import InputError from '@/components/InputError.vue';
 
@@ -46,8 +47,12 @@ const form = useForm<EventForm>({
   room_id: null,
 });
 
+const page = usePage();
+const isClient = computed(() => (page.props.auth as any)?.user?.role === 'client');
+const cancelHref = computed(() => isClient.value ? route('client.events') : route('admin.events.index'));
+
 const submit = (): void => {
-  form.post(route('admin.events.store'));
+  form.post(route(isClient.value ? 'client.events.store' : 'admin.events.store'));
 };
 </script>
 
@@ -143,7 +148,7 @@ const submit = (): void => {
                 <InputError :message="form.errors.event_type" class="mt-2" />
               </div>
 
-              <div>
+              <div v-if="!isClient">
                 <Label for="status">Status</Label>
                 <select
                   id="status"
@@ -157,7 +162,7 @@ const submit = (): void => {
                 <InputError :message="form.errors.status" class="mt-2" />
               </div>
               
-              <div>
+              <div v-if="!isClient">
                 <Label for="priest_name">Priest Name</Label>
                 <Input
                   id="priest_name"
@@ -183,14 +188,14 @@ const submit = (): void => {
                 <Label for="room_id">Room (Optional)</Label>
                 <select
                   id="room_id"
-                  v-model="form.room_id"
+                  v-model.number="form.room_id"
                   class="mt-1 block w-full rounded-md border border-gray-300 bg-white p-2 text-sm"
                 >
                   <option :value="null">No Room</option>
                   <option 
                     v-for="room in rooms" 
                     :key="room.id" 
-                    :value="room.id.toString()"
+                    :value="room.id"
                     :disabled="room.status === 'occupied' || room.status === 'maintenance'"
                     :class="{
                       'text-red-500': room.status === 'occupied',
@@ -210,7 +215,7 @@ const submit = (): void => {
               </div>
 
               <div class="mt-4 flex justify-end space-x-4">
-                <Link :href="route('admin.events.index')" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                <Link :href="cancelHref" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
                   Cancel
                 </Link>
                 <Button

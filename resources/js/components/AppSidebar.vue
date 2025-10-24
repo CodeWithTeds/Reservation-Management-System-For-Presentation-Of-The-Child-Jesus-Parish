@@ -86,6 +86,24 @@ const clientNavItems: NavItem[] = [
         href: dashboard(),
         icon: Home,
     },
+    // Events dropdown for clients
+    {
+        title: 'Events',
+        href: '#',
+        icon: Calendar,
+        hasDropdown: true,
+        dropdownItems: [
+            {
+                title: 'My Events',
+                href: route('client.events'),
+            },
+            {
+                title: 'Create Event',
+                href: route('client.events.create'),
+                icon: PlusCircle,
+            },
+        ],
+    },
     {
         title: 'My Reservations',
         href: route('client.reservations'),
